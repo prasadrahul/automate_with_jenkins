@@ -1,4 +1,4 @@
-package com.example;
+package com.prasad.automation;
 
 /**
  * This is a class.
