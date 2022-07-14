@@ -11,7 +11,7 @@ pipeline {
      }
 
          tools {
-             maven 'localMaven'
+             maven 'Maven-3.6.0'
          }
 
 stages{
