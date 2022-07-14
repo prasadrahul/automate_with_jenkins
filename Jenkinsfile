@@ -15,6 +15,17 @@ pipeline {
          }
 
 stages{
+            stage('Checkout') {
+            steps {
+                checkout(
+					[$class: 'GitSCM',
+					 branches: [[ name: "$GIT_COMMIT" ]],
+					 extensions: [],
+					 userRemoteConfigs: [[credentialsId: 'Github-App-Pwd', url: 'https://github.com/prasadrahul/automate_with_jenkins.git']]
+					]
+                )
+            }
+        }
             stage('Build'){
                 steps {
                     sh 'mvn clean package -Pci'
