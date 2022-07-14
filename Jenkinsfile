@@ -17,7 +17,7 @@ pipeline {
 stages{
             stage('Build'){
                 steps {
-                    sh 'mvn clean package'
+                    sh 'mvn clean package -Pci'
                 }
                 post {
                     success {
@@ -27,20 +27,33 @@ stages{
                 }
             }
 
-            stage ('Deployments'){
-                parallel{
-                    stage ('Deploy to Staging'){
-                        steps {
-                            sh "scp **/target/*.war ${params.tomcat_dev}/webapps"
-                        }
-                    }
-
-                    stage ("Deploy to Production"){
-                        steps {
-                            sh "scp **/target/*.war ${params.tomcat_prod}/webapps"
-                        }
-                    }
-                }
-            }
+//            stage ('Deployments'){
+//                parallel{
+//                    stage ('Deploy to Staging'){
+//                        steps {
+//                            sh "scp **/target/*.war ${params.tomcat_dev}/webapps"
+//                        }
+//                    }
+//
+//                    stage ("Deploy to Production"){
+//                        steps {
+ //                           sh "scp **/target/*.war ${params.tomcat_prod}/webapps"
+ //                       }
+ //                   }
+ //              }
+ //           }    
         }
+    
+        post {
+        always {
+    //        junit testResults: '**/target/surefire-reports/TEST-*.xml'
+
+     //       recordIssues enabledForFailure: true, tools: [mavenConsole(), java(), javaDoc()]
+            recordIssues enabledForFailure: true, tool: checkStyle()
+     //       recordIssues enabledForFailure: true, tool: spotBugs()
+     //       recordIssues enabledForFailure: true, tool: cpd(pattern: '**/target/cpd.xml')
+     //       recordIssues enabledForFailure: true, tool: pmdParser(pattern: '**/target/pmd.xml')
+    //        recordIssues aggregatingResults: true, minimumSeverity: 'NORMAL', qualityGates: [[threshold: 0, type: 'TOTAL_ERROR', unstable: false]], unhealthy: 0
+        }
+    }
 }
